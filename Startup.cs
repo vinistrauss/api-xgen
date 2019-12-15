@@ -27,16 +27,16 @@ namespace api {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices (IServiceCollection services) {
-            services.AddCors ();
+            // services.AddCors ();
 
-            // services.AddCors (options => {
-            //     options.AddPolicy (MyAllowSpecificOrigins,
-            //         builder => {
-            //             builder.WithOrigins ("http://localhost:3000", "http://3.83.242.185:3000")
-            //                 .AllowAnyHeader ()
-            //                 .AllowAnyMethod ();
-            //         });
-            // });
+            services.AddCors (options => {
+                options.AddPolicy (MyAllowSpecificOrigins,
+                    builder => {
+                        builder.WithOrigins ("http://3.83.242.185:3000")
+                            .AllowAnyHeader ()
+                            .AllowAnyMethod ();
+                    });
+            });
 
             services.AddDbContext<ClientContext> (options => {
                 options.UseSqlServer (Configuration.GetConnectionString ("DefaultConnection"));
@@ -62,7 +62,7 @@ namespace api {
 
             app.UseCors (option => option.AllowAnyOrigin ());
 
-            // app.UseCors (MyAllowSpecificOrigins);
+            app.UseCors (MyAllowSpecificOrigins);
 
             app.UseEndpoints (endpoints => {
                 endpoints.MapControllers ();
