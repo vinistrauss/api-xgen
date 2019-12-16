@@ -23,27 +23,19 @@ namespace api {
 
         public IConfiguration Configuration { get; }
 
-        // readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices (IServiceCollection services) {
-            // services.AddCors ();
 
             services.AddCors (options => {
-                // options.AddPolicy (MyAllowSpecificOrigins,
-                //     builder => {
-                //         builder.WithOrigins ("http://3.83.242.185:3000")
-                //             .AllowAnyHeader ()
-                //             .AllowAnyMethod ();
-                //     });
-
-                options.AddDefaultPolicy (
+                options.AddPolicy (MyAllowSpecificOrigins,
                     builder => {
-                        builder.WithOrigins ("http://localhost:3000",
-                                "http://3.83.242.185:3000")
+                        builder.WithOrigins ("http://localhost:3000", "http://3.83.242.185:3000")
                             .AllowAnyHeader ()
                             .AllowAnyMethod ();
                     });
+
             });
 
             services.AddDbContext<ClientContext> (options => {
@@ -68,9 +60,9 @@ namespace api {
 
             app.UseAuthorization ();
 
-            app.UseCors (option => option.AllowAnyOrigin ());
+            // app.UseCors (option => option.AllowAnyOrigin ());
 
-            // app.UseCors (MyAllowSpecificOrigins);
+            app.UseCors (MyAllowSpecificOrigins);
 
             app.UseEndpoints (endpoints => {
                 endpoints.MapControllers ();
